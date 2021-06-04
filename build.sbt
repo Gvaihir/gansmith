@@ -11,22 +11,22 @@ lazy val server = (project in file("server"))
   .settings(
     name := "gansmith-server",
     scalaJSProjects := Seq(client),
-    pipelineStages in Assets := Seq(scalaJSPipeline),
+    Assets / pipelineStages := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
     // triggers scalaJSPipeline when using compile or continuous compilation
-    compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
+    Compile / compile := ((Compile / compile) dependsOn scalaJSPipeline).value,
     libraryDependencies ++= Seq(
       "com.vmunier" %% "scalajs-scripts" % "1.1.2",
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
       "com.typesafe.play" %% "play-slick" % "5.0.0",
       "com.typesafe.slick" %% "slick-codegen" % "3.3.2",
       "com.typesafe.play" %% "play-json" % "2.9.2",
-      "org.postgresql" % "postgresql" % "42.2.11",
-      "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
+      "org.postgresql" % "postgresql" % "42.2.16",
+      "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3",
       "org.mindrot" % "jbcrypt" % "0.4"
     ),
     // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
-    EclipseKeys.preTasks := Seq(compile in Compile)
+    EclipseKeys.preTasks := Seq(Compile / compile)
 
   ).enablePlugins(PlayScala).dependsOn(sharedJvm)
 
@@ -34,7 +34,6 @@ lazy val client = (project in file("client")).settings(commonSettings)
   .settings(
     name := "gansmith-client",
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full),
-    scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     scalaJSUseMainModuleInitializer := true,
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "1.1.0",
