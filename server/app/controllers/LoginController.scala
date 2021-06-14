@@ -33,14 +33,14 @@ class LoginController @Inject() (
     request.body.asJson.map { body =>
       Json.fromJson[A](body) match {
         case JsSuccess(a, path) => f(a)
-        case e @ JsError(_) => Future.successful(Redirect(routes.LoginController.index()))
+        case e @ JsError(_) => Future.successful(Redirect(routes.LoginController.index))
       }
-    }.getOrElse(Future.successful(Redirect(routes.LoginController.index())))
+    }.getOrElse(Future.successful(Redirect(routes.LoginController.index)))
   }
 
   def validate = Action.async { implicit request =>
-    withJsonBody[UserData]( ud =>
-      model.validateUser(ud.userName, ud.password).map {givenId =>
+    withJsonBody[UserData] { ud =>
+      model.validateUser(ud.userName, ud.password).map { givenId =>
         givenId match {
           case Some(userid) => Ok(Json.toJson(true)).
             withSession(
@@ -51,9 +51,16 @@ class LoginController @Inject() (
           case None => Ok(Json.toJson(false))
         }
       }
-    )
+    }
   }
 
+  def createUser = Action.async { implicit request =>
+    withJsonBody[UserData] { ud =>
+      model.createUser(ud.userName, ud.password, ud.email, ud.ethID).map {
+        ???
+      }
+    }
+  }
 
 }
 

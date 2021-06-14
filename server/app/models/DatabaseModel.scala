@@ -15,7 +15,7 @@ class DatabaseModel(db: Database) (implicit executionContext: ExecutionContext) 
     })
   }
 
-  def createUser(username: String, password: String, email: String, ethID: String): Boolean = ???
+  def createUser(username: String, password: String, email: String, ethID: String): Future[Boolean] = ???
 
   def getAsset(assetID: String) = ???
 

@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.Json
 
-abstract case class UserData(userName: String, password: String,
+case class UserData(userName: String, password: String,
                              email: String, ethID: String)
 
 object ReadsAndWrites {
