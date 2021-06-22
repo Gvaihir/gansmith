@@ -1,13 +1,12 @@
-@() (implicit request: RequestHeader, flash: Flash)
+@()(implicit request: RequestHeader, flash: Flash)
 
 
 @main("gansmith") {
-@*    <input type="hidden" id="csrfToken" value="@helper.CSRF.getToken.value">
-    <input type="hidden" id="validateRoute" value="@routes.LoginController.validate()">
-    <input type="hidden" id="createRoute" value="@routes.LoginController.createUser()">
-    <input type="hidden" id="deleteRoute" value="@routes.LoginController.delete()">
-    <input type="hidden" id="logoutRoute" value="@routes.LoginController.logout()">
+    <div id="react-root"></div>
+    <h2>Hello</h2>
 
-    <div id="react-root"></div>*@
-    @*<script src="@routes.Assets.versioned("javascript/version5.js")"></script>*@
+    <div>
+        <p>Sign in</p>
+        <p>Sign up</p>
+    </div>
 }

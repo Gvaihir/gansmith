@@ -57,19 +57,19 @@ trait Tables {
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
    *  @param username Database column username SqlType(varchar), Length(20,true)
    *  @param password Database column password SqlType(varchar), Length(200,true)
-   *  @param email Database column email SqlType(varchar), Length(100,true), Default(None)
-   *  @param ethId Database column eth_id SqlType(varchar), Length(100,true), Default(None) */
-  case class UsersRow(id: Int, username: String, password: String, email: Option[String] = None, ethId: Option[String] = None)
+   *  @param email Database column email SqlType(varchar), Length(100,true)
+   *  @param ethId Database column eth_id SqlType(varchar), Length(100,true) */
+  case class UsersRow(id: Int, username: String, password: String, email: String, ethId: String)
   /** GetResult implicit for fetching UsersRow objects using plain SQL queries */
-  implicit def GetResultUsersRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]]): GR[UsersRow] = GR{
+  implicit def GetResultUsersRow(implicit e0: GR[Int], e1: GR[String]): GR[UsersRow] = GR{
     prs => import prs._
-    UsersRow.tupled((<<[Int], <<[String], <<[String], <<?[String], <<?[String]))
+    UsersRow.tupled((<<[Int], <<[String], <<[String], <<[String], <<[String]))
   }
   /** Table description of table users. Objects of this class serve as prototypes for rows in queries. */
   class Users(_tableTag: Tag) extends profile.api.Table[UsersRow](_tableTag, "users") {
     def * = (id, username, password, email, ethId) <> (UsersRow.tupled, UsersRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(username), Rep.Some(password), email, ethId)).shaped.<>({r=>import r._; _1.map(_=> UsersRow.tupled((_1.get, _2.get, _3.get, _4, _5)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(username), Rep.Some(password), Rep.Some(email), Rep.Some(ethId))).shaped.<>({r=>import r._; _1.map(_=> UsersRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
@@ -77,10 +77,10 @@ trait Tables {
     val username: Rep[String] = column[String]("username", O.Length(20,varying=true))
     /** Database column password SqlType(varchar), Length(200,true) */
     val password: Rep[String] = column[String]("password", O.Length(200,varying=true))
-    /** Database column email SqlType(varchar), Length(100,true), Default(None) */
-    val email: Rep[Option[String]] = column[Option[String]]("email", O.Length(100,varying=true), O.Default(None))
-    /** Database column eth_id SqlType(varchar), Length(100,true), Default(None) */
-    val ethId: Rep[Option[String]] = column[Option[String]]("eth_id", O.Length(100,varying=true), O.Default(None))
+    /** Database column email SqlType(varchar), Length(100,true) */
+    val email: Rep[String] = column[String]("email", O.Length(100,varying=true))
+    /** Database column eth_id SqlType(varchar), Length(100,true) */
+    val ethId: Rep[String] = column[String]("eth_id", O.Length(100,varying=true))
   }
   /** Collection-like TableQuery object for table Users */
   lazy val Users = new TableQuery(tag => new Users(tag))
